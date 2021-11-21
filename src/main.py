@@ -1,4 +1,3 @@
-# %%
 import torch
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -21,6 +20,8 @@ data_transform = transforms.Compose(
 )
 
 dataset = CaptionDataset(captions_path, personalities_path, images_path, data_transform)
+
+vocab = dataset.get_vocab()
 data_loader = DataLoader(dataset, batch_size=4, shuffle = True)
 iterator = iter(data_loader)
 
