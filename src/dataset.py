@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import os
 import json
+from vocab import Vocabulary
 
 # https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
 class CaptionDataset(Dataset):
@@ -39,3 +40,9 @@ class CaptionDataset(Dataset):
             if personality in personality_list:
                 return personality_type
         return "neutral"
+
+    def get_vocab(self):
+        vocab = Vocabulary()
+        for caption in self.captions["comment"].to_list():
+            vocab.add_sentence(caption)
+        return vocab
