@@ -1,29 +1,19 @@
 import torch
-import torchvision
-from torchvision import models
 from torch import nn
+from encoder import Encoder
 
 class Net(nn.Module):
 
     def __init__(self):
         super(Net, self).__init__()
-        self.image_encoder = self.build_image_encoder()
+        self.encoder = Encoder()
         pass
 
     def forward(self, input_batch):
         (images, texts) = input_batch
-        encoded_personality = self.encode_personality(texts['personality'])
+        encoded_personalities = self.encode_personality(texts['personality'])
+        encoded_images = self.encoder.forward(images)
         pass
-
-    def encode_image(self, image):
-        return self.image_encoder(image)
-    
-    def build_image_encoder(self):
-        image_encoder = models.vgg16(pretrained=True)
-        for param in image_encoder.parameters():
-            param.requires_grad = False
-        image_encoder.classifier = image_encoder.classifier[:2]
-        return image_encoder
 
     # size of list will be the batch size
     # so far we have 3 emotions only - positive, negative and neutral

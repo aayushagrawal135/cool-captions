@@ -30,9 +30,6 @@ iterator = iter(data_loader)
 # `texts` is a dictionary with 3 keys: `personality`, `image_hash` and `comment`
 # value for each key is of type `list` of size 4 (batch size)
 images, texts = next(iterator)
-
 network = Net()
 batch = (images, texts)
 network.forward(batch)
-
-network.encode_image(torch.unsqueeze(images[0], dim = 0))
