@@ -11,7 +11,12 @@ cd cool-captions
 git config user.email "<email address>"
 git config user.name "<name>"
 ```
+- Setup a virtual environment, this helps to keep dependencies in check
+[Virtualenv](https://sourabhbajaj.com/mac-setup/Python/virtualenv.html)
+- Install dependencies by running the following
+[How can I install packages using pip according to the requirements.txt file from a local directory?](https://stackoverflow.com/questions/7225900/how-can-i-install-packages-using-pip-according-to-the-requirements-txt-file-from)
+- If new libraries are installed, `requirements.txt` can be updated by running `pip freeze > requirements.txt`
 
 #### Optional
 
-[Jupyter Notebooks in VS Code](https://code.visualstudio.com/docs/datascience/jupyter-notebooks)
+[Jupyter Notebooks in VS Code](https://code.visualstudio.com/docs/datascience/jupyter-notebooks)[helps to switch between Jupyter Notebooks and Python files just by adding/removing a comment `# %%`, makes debugging quicker]
