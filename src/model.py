@@ -1,19 +1,22 @@
 import torch
 from torch import nn
 from encoder import Encoder
+from decoder import Decoder
 
 class Net(nn.Module):
 
-    def __init__(self):
+    def __init__(self, vocab):
         super(Net, self).__init__()
         self.encoder = Encoder()
-        pass
+        self.decoder = Decoder(encoding_dim=4096, embedding_dim=300, hidden_dim=400, vocab=vocab)
 
     def forward(self, input_batch):
-        (images, texts) = input_batch
-        encoded_personalities = self.encode_personality(texts['personality'])
+        (images, captions, lengths) = input_batch
+        # For vgg16, [4, 4096]
         encoded_images = self.encoder.forward(images)
-        pass
+        # list of tensors of [batch, 1, hidden] of len max(lengths)
+        output_sequence = self.decoder.forward(encoded_images, lengths)
+        return output_sequence
 
     # size of list will be the batch size
     # so far we have 3 emotions only - positive, negative and neutral

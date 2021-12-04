@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 import pandas as pd
 from matplotlib import pyplot as plt
 import numpy as np
@@ -44,5 +44,5 @@ class CaptionDataset(Dataset):
     def get_vocab(self):
         vocab = Vocabulary()
         for caption in self.captions["comment"].to_list():
-            vocab.add_sentence(caption)
+            vocab.add_sentence_tokens_to_corpus(caption)
         return vocab
