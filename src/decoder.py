@@ -1,7 +1,7 @@
 import torch
 from torch import nn
-
 from vocab import Vocabulary
+from embedding import Embedding
 
 class Decoder(nn.Module):
     def __init__(self, encoding_dim, embedding_dim, hidden_dim, vocab:Vocabulary):
@@ -13,13 +13,15 @@ class Decoder(nn.Module):
         self.D = 1 # 2 if bidirectional is True
 
         # Embedding for words
-        self.embeddings = nn.Embedding(len(vocab), embedding_dim, padding_idx = vocab.word_to_idx[vocab.pad])
+        # self.embeddings = nn.Embedding(len(vocab), embedding_dim, padding_idx = vocab.word_to_idx[vocab.pad])
         # Linear layer to squash images
         self.out = nn.Linear(encoding_dim, hidden_dim)
         # Linear layer
         self.hidden2out = nn.Linear(self.D * hidden_dim, embedding_dim)
         # LSTM layer
         self.lstm = nn.LSTM(input_size = embedding_dim, hidden_size = hidden_dim, batch_first = True)
+        # Log softmax
+        self.log_softmax = nn.LogSoftmax(dim = 2)
 
     # images = (batch, 4096)
     def forward(self, images_encoding, lengths):
@@ -33,7 +35,7 @@ class Decoder(nn.Module):
         # hidden_state = torch.randn(self.num_layers, batch_size, self.hidden_dim)
         # cell_state = torch.randn(self.num_layers, batch_size, self.hidden_dim)
         hidden = (hidden_state, cell_state)
-        sos_input = self.embeddings(self.get_input(batch_size))
+        sos_input = Embedding.get(self.get_input(batch_size))
 
         outputs_sequence = list()
         output = sos_input
@@ -41,7 +43,13 @@ class Decoder(nn.Module):
             out, hidden = self.lstm(output, hidden)
             output = self.hidden2out(out)
             outputs_sequence.append(output)
-        return outputs_sequence
+        
+        output_tensor = torch.stack(list(outputs_sequence), dim=0)
+        # %%
+        log_output = self.log_softmax(output_tensor.squeeze())
+        # %%
+# %%
+        return log_output
 
     def get_input(self, batch_size):
         sos_id = self.vocab.word_to_idx[self.vocab.sos]

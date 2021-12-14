@@ -41,4 +41,7 @@ def custom_collate_fn(batch, window_size, vocab:Vocabulary):
 
     # We are now ready to return our variables. The order we return our variables
     # here will match the order we read them in our training loop.
+
+    # output => (len of sentence * num of images in batch * vector size)
+
     return images, padded_captions, lengths

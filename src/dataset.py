@@ -18,6 +18,10 @@ class CaptionDataset(Dataset):
 
     def __getitem__(self, index):
         image_name = self.image_names[index]
+        try:
+            pass
+        except:
+            pass
         image = plt.imread(self.images_dir + image_name)
         # Similar to SELECT * FROM self.captions WHERE `image_hash` = image_name;
         # We did a split below since `image name = image_hash.jpg` in the dataset
@@ -30,7 +34,16 @@ class CaptionDataset(Dataset):
         # column name is the key and value is the value
         info_as_dict = info.iloc[0].to_dict()
         info_as_dict['personality'] = self.get_personality_type(info_as_dict['personality'])
+
+        # check image dims
+        # transformed_image = self.check(transformed_image)
+
         return transformed_image, info_as_dict
+
+    def check(self, image):
+        if image.size()[0] != 3:
+            return image[0].repeat(4,1)
+        return image
 
     def __len__(self):
         return len(self.image_names)

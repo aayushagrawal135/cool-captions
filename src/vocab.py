@@ -6,6 +6,7 @@ class Vocabulary():
     idx = 4
 
     def __init__(self):
+        # initialize for dictionary
         self.sos = "<SOS>"
         self.eos = "<EOS>"
         self.pad = "<PAD>"
@@ -33,5 +34,13 @@ class Vocabulary():
     def __len__(self):
         return len(self.word_to_idx)
 
-    def get_embedding(self, dims):
-        return nn.Embedding(self.__len__(), dims, padding_idx = self.word_to_idx["<PAD>"])
+    def check_embedding(self, embeds):
+        count = 0
+        for word, index in self.word_to_idx.items():
+            try:
+                embeds.get(word)
+            except:
+                print(f"{index} {word}")
+                count = count + 1
+        print(count)
+        # return nn.Embedding(self.__len__(), dims, padding_idx = self.word_to_idx["<PAD>"])
